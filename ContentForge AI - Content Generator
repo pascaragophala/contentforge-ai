@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentForge AI - Content Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(120deg, #6366f1, #8b5cf6, #d946ef);
+        }
+        
+        .card-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .typing-animation::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .loader {
+            border-top-color: #8b5cf6;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+        
+        @-webkit-keyframes spinner {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="h-8 w-8 rounded-md gradient-bg flex items-center justify-center text-white mr-2">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <span class="font-bold text-xl text-gray-800">ContentForge<span class="text-indigo-600">AI</span></span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Features</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Examples</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Pricing</a>
+                    <button class="ml-4 px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Sign Up Free
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
+                        <span class="block">Create amazing content</span>
+                        <span class="block text-indigo-600 mt-1">in seconds with AI</span>
+                    </h1>
+                    <p class="mt-4 text-lg text-gray-500">
+                        ContentForge AI helps you generate high-quality, SEO-friendly content for blogs, social media, emails, and more — powered by advanced AI technology.
+                    </p>
+                    <div class="mt-8 flex flex-col sm:flex-row">
+                        <div class="rounded-md shadow">
+                            <a href="#generator" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white gradient-bg hover:opacity-90 md:py-4 md:text-lg md:px-10">
+                                Try for Free
+                            </a>
+                        </div>
+                        <div class="mt-3 sm:mt-0 sm:ml-3">
+                            <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10">
+                                Watch Demo
+                                <i class="fas fa-play-circle ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0">
+                    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-8 shadow-lg">
+                        <div class="bg-white rounded-md p-4 shadow-sm">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center">
+                                    <span class="h-3 w-3 bg-red-500 rounded-full"></span>
+                                    <span class="h-3 w-3 bg-yellow-500 rounded-full ml-2"></span>
+                                    <span class="h-3 w-3 bg-green-500 rounded-full ml-2"></span>
+                                </div>
+                                <div class="text-xs text-gray-500">contentforgeai.app</div>
+                            </div>
+                            <div class="text-sm text-gray-800 typing-animation" id="demo-text">
+                                Creating engaging blog posts about artificial intelligence and its impact on society...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="bg-gray-50 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-base font-semibold text-indigo-600 tracking-wide uppercase">Features</h2>
+                <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Write better content, faster
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Everything you need to create compelling content for any platform
+                </p>
+            </div>
+
+            <div class="mt-12">
+                <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    <div class="bg-white overflow-hidden shadow rounded-lg card-hover">
+                        <div class="px-6 py-8">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md gradient-bg text-white mb-5">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900">Instant Generation</h3>
+                            <p class="mt-2 text-base text-gray-500">
+                                Generate blog posts, social media captions, product descriptions, and more in seconds.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg card-hover">
+                        <div class="px-6 py-8">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md gradient-bg text-white mb-5">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900">Advanced AI</h3>
+                            <p class="mt-2 text-base text-gray-500">
+                                Powered by state-of-the-art language models for human-like, contextually relevant content.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg card-hover">
+                        <div class="px-6 py-8">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md gradient-bg text-white mb-5">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900">SEO Optimization</h3>
+                            <p class="mt-2 text-base text-gray-500">
+                                Generate content that's optimized for search engines and your target keywords.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg card-hover">
+                        <div class="px-6 py-8">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md gradient-bg text-white mb-5">
+                                <i class="fas fa-sliders-h"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900">Customizable</h3>
+                            <p class="mt-2 text-base text-gray-500">
+                                Adjust tone, style, and length to match your brand voice and content needs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg card-hover">
+                        <div class="px-6 py-8">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md gradient-bg text-white mb-5">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900">Multilingual</h3>
+                            <p class="mt-2 text-base text-gray-500">
+                                Generate and translate content in over 25 languages to reach global audiences.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white overflow-hidden shadow rounded-lg card-hover">
+                        <div class="px-6 py-8">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md gradient-bg text-white mb-5">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900">Content Library</h3>
+                            <p class="mt-2 text-base text-gray-500">
+                                Save, organize, and edit your generated content in your personal library.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generator Section -->
+    <div id="generator" class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-base font-semibold text-indigo-600 tracking-wide uppercase">Try it yourself</h2>
+                <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Generate content in seconds
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Enter a topic, select content type, and let our AI do the rest
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <div class="mb-6">
+                        <label for="content-type" class="block text-sm font-medium text-gray-700 mb-1">Content Type</label>
+                        <select id="content-type" class="block w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="blog-post">Blog Post</option>
+                            <option value="social-media">Social Media Post</option>
+                            <option value="email">Email</option>
+                            <option value="product-description">Product Description</option>
+                            <option value="ad-copy">Ad Copy</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="topic" class="block text-sm font-medium text-gray-700 mb-1">Topic or Keywords</label>
+                        <input type="text" id="topic" class="block w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., Benefits of meditation for productivity">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div>
+                            <label for="tone" class="block text-sm font-medium text-gray-700 mb-1">Tone</label>
+                            <select id="tone" class="block w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="professional">Professional</option>
+                                <option value="casual">Casual</option>
+                                <option value="friendly">Friendly</option>
+                                <option value="authoritative">Authoritative</option>
+                                <option value="humorous">Humorous</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="length" class="block text-sm font-medium text-gray-700 mb-1">Length</label>
+                            <select id="length" class="block w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="short">Short</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="long">Long</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="language" class="block text-sm font-medium text-gray-700 mb-1">Language</label>
+                            <select id="language" class="block w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="it">Italian</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button id="generate-btn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Generate Content
+                    </button>
+                </div>
+
+                <div id="result-container" class="mt-8 bg-white border border-gray-200 rounded-lg shadow-sm p-6 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Generated Content</h3>
+                        <div class="flex space-x-2">
+                            <button id="copy-btn" class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i class="fas fa-copy mr-2"></i> Copy
+                            </button>
+                            <button id="save-btn" class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i class="fas fa-save mr-2"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                    <div id="loader" class="flex justify-center items-center py-10">
+                        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-10 w-10"></div>
+                    </div>
+                    <div id="result-content" class="prose max-w-none">
+                        <!-- Generated content will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="bg-gray-50 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-base font-semibold text-indigo-600 tracking-wide uppercase">Testimonials</h2>
+                <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Trusted by content creators
+                </p>
+            </div>
+            <div class="mt-12">
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="text-yellow-400 flex mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            "ContentForge AI has completely transformed our content strategy. We're producing twice as much high-quality content in half the time. It's been a game-changer for our marketing team."
+                        </p>
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500 font-bold">SM</div>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-medium text-gray-900">Sarah Miller</h4>
+                                <p class="text-sm text-gray-500">Marketing Director, TechCorp</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="text-yellow-400 flex mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            "As a freelance writer, I was skeptical about AI content tools, but ContentForge AI has exceeded my expectations. The quality and versatility are impressive, and it helps me overcome writer's block."
+                        </p>
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500 font-bold">JD</div>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-medium text-gray-900">James Davis</h4>
+                                <p class="text-sm text-gray-500">Freelance Content Writer</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="text-yellow-400 flex mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            "We've been able to scale our content production for multiple clients without sacrificing quality. ContentForge AI consistently delivers content that requires minimal editing and resonates with audiences."
+                        </p>
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500 font-bold">RL</div>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-medium text-gray-900">Rachel Lee</h4>
+                                <p class="text-sm text-gray-500">CEO, Digital Marketing Agency</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <div class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-base font-semibold text-indigo-600 tracking-wide uppercase">Pricing</h2>
+                <p class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Plans for every content need
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Choose the perfect plan for your content creation goals
+                </p>
+            </div>
+
+            <div class="mt-12 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
+                <div class="border border-gray-200 rounded-lg shadow-sm p-8">
+                    <h3 class="text-xl font-medium text-gray-900">Starter</h3>
+                    <p class="mt-4 text-gray-500">Perfect for individuals and small projects</p>
+                    <p class="mt-8">
+                        <span class="text-4xl font-extrabold text-gray-900">$9</span>
+                        <span class="text-base font-medium text-gray-500">/month</span>
+                    </p>
+                    <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">10,000 words per month</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">5 content types</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Basic customization</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Email support</p>
+                        </li>
+                    </ul>
+                    <div class="mt-8">
+                        <a href="#" class="block w-full bg-indigo-50 border border-indigo-100 rounded-md py-3 text-sm font-medium text-indigo-700 text-center hover:bg-indigo-100">
+                            Start Free Trial
+                        </a>
+                    </div>
+                </div>
+
+                <div class="border border-indigo-500 rounded-lg shadow-sm p-8 relative">
+                    <div class="absolute top-0 inset-x-0 transform -translate-y-1/2">
+                        <div class="inline-block px-4 py-1 rounded-full text-sm font-semibold tracking-wide text-white gradient-bg">
+                            Most Popular
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-900">Professional</h3>
+                    <p class="mt-4 text-gray-500">For growing businesses and content teams</p>
+                    <p class="mt-8">
+                        <span class="text-4xl font-extrabold text-gray-900">$29</span>
+                        <span class="text-base font-medium text-gray-500">/month</span>
+                    </p>
+                    <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">50,000 words per month</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">All content types</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Advanced customization</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Priority support</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Content library</p>
+                        </li>
+                    </ul>
+                    <div class="mt-8">
+                        <a href="#" class="block w-full gradient-bg rounded-md py-3 text-sm font-medium text-white text-center hover:opacity-90">
+                            Start Free Trial
+                        </a>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg shadow-sm p-8">
+                    <h3 class="text-xl font-medium text-gray-900">Enterprise</h3>
+                    <p class="mt-4 text-gray-500">For organizations with high volume needs</p>
+                    <p class="mt-8">
+                        <span class="text-4xl font-extrabold text-gray-900">$99</span>
+                        <span class="text-base font-medium text-gray-500">/month</span>
+                    </p>
+                    <ul class="mt-6 space-y-4">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Unlimited words</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">All content types</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Custom AI training</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">Dedicated account manager</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check text-green-500"></i>
+                            </div>
+                            <p class="ml-3 text-base text-gray-500">API access</p>
+                        </li>
+                    </ul>
+                    <div class="mt-8">
+                        <a href="#" class="block w-full bg-indigo-50 border border-indigo-100 rounded-md py-3 text-sm font-medium text-indigo-700 text-center hover:bg-indigo-100">
+                            Contact Sales
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="gradient-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
+                    <span>Ready to transform your content strategy?</span>
+                </h2>
+                <p class="mt-4 text-xl text-indigo-100">
+                    Join thousands of content creators who are already using ContentForge AI
+                </p>
+                <div class="mt-8 flex justify-center">
+                    <div class="inline-flex rounded-md shadow">
+                        <a href="#" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50">
+                            Get Started Free
+                        </a>
+                    </div>
+                    <div class="ml-3 inline-flex">
+                        <a href="#" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-700 bg-opacity-60 hover:bg-opacity-70">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                        Products
+                    </h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Blog Generator
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Social Media Tool
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Email Writer
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                SEO Assistant
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                        Resources
+                    </h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Documentation
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Guides
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                API Reference
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Blog
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                        Company
+                    </h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Careers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Press
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                        Legal
+                    </h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Privacy
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Terms
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Cookies
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-300 hover:text-white">
+                                Licenses
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center">
+                    <div class="h-8 w-8 rounded-md gradient-bg flex items-center justify-center text-white mr-2">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <span class="font-bold text-xl text-white">ContentForge<span class="text-indigo-400">AI</span></span>
+                </div>
+                <p class="mt-4 md:mt-0 text-base text-gray-400">
+                    &copy; 2025 ContentForge AI. All rights reserved.
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-gray-300">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gray-300">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gray-300">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/pasca-ragophala-a9442b233/" class="text-gray-400 hover:text-gray-300">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Demo text typing animation
+        const demoText = document.getElementById('demo-text');
+        const texts = [
+            "Creating engaging blog posts about artificial intelligence and its impact on society...",
+            "Generating SEO-optimized product descriptions for an e-commerce store...",
+            "Writing compelling email newsletters to boost open rates and conversions...",
+            "Crafting attention-grabbing social media captions that drive engagement..."
+        ];
+        let textIndex = 0;
+
+        setInterval(() => {
+            demoText.textContent = texts[textIndex];
+            textIndex = (textIndex + 1) % texts.length;
+        }, 5000);
+
+        // Generate button functionality
+        const generateBtn = document.getElementById('generate-btn');
+        const resultContainer = document.getElementById('result-container');
+        const loader = document.getElementById('loader');
+        const resultContent = document.getElementById('result-content');
+        const copyBtn = document.getElementById('copy-btn');
+        const saveBtn = document.getElementById('save-btn');
+
+        generateBtn.addEventListener('click', () => {
+            const topic = document.getElementById('topic').value;
+            if (!topic) {
+                alert('Please enter a topic');
+                return;
+            }
+
+            resultContainer.classList.remove('hidden');
+            loader.style.display = 'flex';
+            resultContent.style.display = 'none';
+
+            // Simulate API call with timeout
+            setTimeout(() => {
+                loader.style.display = 'none';
+                resultContent.style.display = 'block';
+                
+                const contentType = document.getElementById('content-type').value;
+                const tone = document.getElementById('tone').value;
+                
+                if (contentType === 'blog-post') {
+                    resultContent.innerHTML = generateBlogPost(topic, tone);
+                } else if (contentType === 'social-media') {
+                    resultContent.innerHTML = generateSocialPost(topic, tone);
+                } else {
+                    resultContent.innerHTML = generateGenericContent(topic, contentType, tone);
+                }
+            }, 2000);
+        });
+
+        // Copy button functionality
+        copyBtn.addEventListener('click', () => {
+            const content = resultContent.innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                copyBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-copy mr-2"></i> Copy';
+                }, 2000);
+            });
+        });
+
+        // Save button functionality
+        saveBtn.addEventListener('click', () => {
+            saveBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Saved';
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Save';
+            }, 2000);
+        });
+
+        // Sample content generators
+        function generateBlogPost(topic, tone) {
+            const toneAdjective = tone === 'professional' ? 'important' : 
+                                tone === 'casual' ? 'interesting' : 
+                                tone === 'friendly' ? 'helpful' : 
+                                tone === 'authoritative' ? 'essential' : 'fun';
+            
+            return `
+                <h2>10 ${toneAdjective.charAt(0).toUpperCase() + toneAdjective.slice(1)} Things You Need to Know About ${topic}</h2>
+                <p>In today's fast-paced world, understanding ${topic} has become increasingly important for professionals and enthusiasts alike. This comprehensive guide explores the key aspects you should be aware of.</p>
+                <h3>1. The Evolution of ${topic}</h3>
+                <p>Over the past decade, we've seen significant changes in how ${topic} is approached. From initial concepts to modern applications, the journey has been remarkable. Experts in the field have noted that early adopters of ${topic} methodologies have seen a 35% increase in efficiency.</p>
+                <h3>2. Why ${topic} Matters Now More Than Ever</h3>
+                <p>In an increasingly connected world, the relevance of ${topic} cannot be overstated. Recent studies have shown that organizations implementing ${topic} strategies have experienced substantial growth compared to those who haven't embraced these concepts.</p>
+                <p>Continue reading to discover more insights about ${topic} and how it can benefit your personal or professional development...</p>
+            `;
+        }
+
+        function generateSocialPost(topic, tone) {
+            if (tone === 'humorous') {
+                return `<p>😂 When you try to explain ${topic} to your friends and they just stare blankly! #${topic.replace(/\s+/g, '')} #WeveAllBeenThere</p>
+                        <p>Who else has fallen down the ${topic} rabbit hole and lost track of time? Drop a ✋ if you're obsessed too!</p>`;
+            } else if (tone === 'professional') {
+                return `<p>New research reveals groundbreaking insights on ${topic}. Our team has analyzed the latest data to bring you actionable strategies. #${topic.replace(/\s+/g, '')} #IndustryInsights</p>
+                        <p>Are you leveraging the full potential of ${topic} in your organization? Learn how industry leaders are staying ahead of the curve.</p>`;
+            } else {
+                return `<p>✨ Discovered something amazing about ${topic} today! Can't wait to share these insights with you all! #${topic.replace(/\s+/g, '')} #LearningTogether</p>
+                        <p>What's your experience with ${topic}? Share your thoughts in the comments below! 👇</p>`;
+            }
+        }
+
+        function generateGenericContent(topic, type, tone) {
+            if (type === 'email') {
+                return `<p><strong>Subject:</strong> Discover How ${topic} Can Transform Your Results</p>
+                        <p>Dear [Name],</p>
+                        <p>I hope this email finds you well. I wanted to reach out personally regarding ${topic} and how it might benefit you and your team.</p>
+                        <p>We've recently completed a comprehensive analysis on ${topic} and discovered several key insights that could significantly impact your strategy. Would you be interested in discussing these findings further?</p>
+                        <p>I'm available for a quick call this week to share more details.</p>
+                        <p>Best regards,<br>[Your Name]</p>`;
+            } else if (type === 'product-description') {
+                return `<h3>${topic} - Premium Solution</h3>
+                        <p>Introducing our innovative ${topic} product, designed with your needs in mind. This state-of-the-art solution combines cutting-edge technology with user-friendly features to deliver an unparalleled experience.</p>
+                        <p><strong>Key Features:</strong></p>
+                        <ul>
+                            <li>Advanced ${topic} integration</li>
+                            <li>Customizable settings for personalized use</li>
+                            <li>Sleek, modern design that complements any environment</li>
+                            <li>Energy-efficient operation for sustainability</li>
+                        </ul>
+                        <p>Experience the difference with our ${topic} solution. Satisfaction guaranteed or your money back.</p>`;
+            } else {
+                return `<h3>Discover the Power of ${topic}</h3>
+                        <p>Transform your approach with our comprehensive ${topic} solutions. Whether you're a beginner or an expert, our platform offers everything you need to succeed.</p>
+                        <p>Join thousands of satisfied users who have already leveraged ${topic} to achieve their goals. Start your journey today!</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
